@@ -9,6 +9,7 @@ import kotlin.math.roundToInt
 
 interface Presenter {
     val viewObserver: MyObservable<Pair<String,Int>>
+    val coinTypes : List<String>
 
     fun fetchPrice(selectedCoin: String)
 }
@@ -16,6 +17,7 @@ interface Presenter {
 internal class PresenterImpl(private val repository:DataRepo): Presenter {
 
     override val viewObserver = Subject<Pair<String,Int>>()
+    override val coinTypes get() = repository.coinTypes
 
     override fun fetchPrice(selectedCoin: String) {
         thread {

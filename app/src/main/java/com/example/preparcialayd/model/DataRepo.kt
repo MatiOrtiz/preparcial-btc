@@ -1,53 +1,26 @@
 package com.example.preparcialayd.model
 
-import C.ApiY
-import android.content.Context
-import android.content.SharedPreferences
-import androidx.core.content.edit
-import com.example.preparcialayd.injector.CriptoInjector
+import com.example.preparcialayd.model.external.ExternalData
+import com.example.preparcialayd.model.local.LocalData
 
 interface DataRepo {
+    val coinTypes : List<String>
     fun fetchPrice(coin:String):Double
 }
 
-interface LocalData {
-    fun getData():Double
-}
+internal class DataRepoImpl(private val localData: LocalData,
+                            private val externalData: ExternalData): DataRepo {
 
-interface ExternalData {
-    fun getData():Double
-}
-
-class localDataImpl(private val sharedPreferences:SharedPreferences) : LocalData {
-    override fun getData(): Double {
-        TODO("Not yet implemented")
-    }
-}
-
-class ExternalDataImpl(private val sharedPreferences: SharedPreferences) : ExternalData {
-    override fun getData(): Double {
-        TODO("Not yet implemented")
-    }
-}
-
-
-internal class DataRepoImpl(localData: LocalData, externalData: ExternalData): DataRepo {
-
-    val sharedPreferences = CriptoInjector.sharedPreferences
+    override val coinTypes = listOf("USD", "EUR", "CAD", "JPY", "RUB", "GBP", "KRW", "PLN")
 
     override fun fetchPrice(coin: String): Double {
-        val savedValue = sharedPreferences.getString(coin, null)
-        var result : Double
+        val dbPrice = localData.getData(coin)
+        val result : Double
 
-        if(savedValue != null) {
-            try {
-               result = savedValue.toDouble()
-            } catch (e: Exception) {
-               result = 0.0
-           }
+        if(dbPrice!= null) {
+            result = dbPrice
         } else {
-            result = ApiY().get(coin)
-            sharedPreferences.edit { putString(coin, result.toString()) }
+            result = externalData.getData(coin)
         }
         return result
     }

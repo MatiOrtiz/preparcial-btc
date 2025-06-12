@@ -1,4 +1,4 @@
-package C
+package com.example.preparcialayd.model
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject

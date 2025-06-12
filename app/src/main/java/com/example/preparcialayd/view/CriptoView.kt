@@ -13,8 +13,7 @@ import com.example.preparcialayd.injector.CriptoInjector
 
 class CriptoView : AppCompatActivity() {
 
-    //TODO: Mover COIN_TYPES a repository
-    private val COIN_TYPES = listOf("USD", "EUR", "CAD", "JPY", "RUB", "GBP", "KRW", "PLN")
+    private val COIN_TYPES get() = presenter.coinTypes
 
     private lateinit var presenter: Presenter
     private lateinit var spinner: Spinner
