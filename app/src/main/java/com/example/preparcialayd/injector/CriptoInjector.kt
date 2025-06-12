@@ -17,12 +17,12 @@ object CriptoInjector {
     lateinit var dataRepo: DataRepo
 
     fun init(context: Context) {
-        presenter = PresenterImpl(dataRepo)
         val sharedPreferences = context.getSharedPreferences("MY_SHARED_PREFERENCES", Context.MODE_PRIVATE)
         val resolver = ApiResolverImpl()
 
         val localData : LocalData = LocalDataImpl(sharedPreferences)
         val externalData : ExternalData = ExternalDataImpl(sharedPreferences, resolver)
         dataRepo = DataRepoImpl(localData, externalData)
+        presenter = PresenterImpl(dataRepo)
     }
 }
